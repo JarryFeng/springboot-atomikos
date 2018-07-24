@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jarry.mapper.MybatisMapper">
+    <resultMap id="BaseResultMap" type="com.jarry.domain.User">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="age" property="age" />
+        <result column="password" property="password" />
+    </resultMap>
+
+    <parameterMap id="User" type="com.jarry.domain.User"/>
+
+    <sql id="Base_Column_List">
+        id, name, age, password
+    </sql>
+    <!--<select id="selectOne" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tbl_user
+        where id =#{id}
+    </select>-->
+
+   <!-- <insert id="addUser" parameterMap="User" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        tbl_user(name,age, password)
+        values
+        (#{name}, #{age}, #{password})
+    </insert>-->
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from tbl_user
+    </select>
+
+</mapper>
