@@ -1,4 +1,4 @@
-package com.jarry.mapper;
+package com.jarry.mapper.slave;
 
 import com.jarry.entry.User;
 import org.apache.ibatis.annotations.Insert;
@@ -6,11 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
 /**
- * Created by jarry on 2018/6/14.
+ * Created by jarry on 2018/7/25.
  */
-@Mapper
-public interface MybatisMapper {
 
+public interface SlaveMapper {
 
 
     @Insert("insert into tbl_user(age, name, password) values(#{age}, #{name}, #{password})")

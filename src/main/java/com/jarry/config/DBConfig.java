@@ -28,12 +28,11 @@ import java.util.Map;
  * 万恶的@Primary注解，放在动态数据源中，会导致循环引用
  */
 @Configuration
-@MapperScan(basePackages = "com.jarry.mapper")
 public class DBConfig {
 
     // 配置数据源
     @Bean(name = "dynamicDataSource")
-    public DataSource dynamicDataSource(@Qualifier("testDataSource") DataSource dataSource1, @Qualifier("testDataSource2") DataSource dataSource2) throws SQLException {
+    public DataSource dynamicDataSource(@Qualifier("datasource1") DataSource dataSource1, @Qualifier("datasource2") DataSource dataSource2) throws SQLException {
         MyDataSourceRouting myDataSourceRouting = new MyDataSourceRouting();
 
         Map<Object, Object> map = new HashMap<Object, Object>();
@@ -44,14 +43,13 @@ public class DBConfig {
         return myDataSourceRouting;
     }
 
-    @Primary
-    @Bean(name = "dynamicSqlSessionFactory")
+    /*@Bean(name = "dynamicSqlSessionFactory")
     public SqlSessionFactory testSqlSessionFactory(@Qualifier("dynamicDataSource") DataSource dataSource)
             throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         return bean.getObject();
-    }
+    }*/
 
 
     /*atomikos事务管理器*/
@@ -76,49 +74,4 @@ public class DBConfig {
         return jtaTransactionManager;
     }
 
-
-    @Bean(name = "testDataSource")
-    @Primary
-    public DataSource testDataSource(MyDBConfig testConfig) throws SQLException {
-        MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
-        mysqlXaDataSource.setUrl(testConfig.getUrl());
-        mysqlXaDataSource.setPassword(testConfig.getPassword());
-        mysqlXaDataSource.setUser(testConfig.getUsername());
-
-        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-        xaDataSource.setXaDataSource(mysqlXaDataSource);
-        xaDataSource.setUniqueResourceName("dataSource1");
-
-        xaDataSource.setMinPoolSize(testConfig.getMinPoolSize());
-        xaDataSource.setMaxPoolSize(testConfig.getMaxPoolSize());
-        xaDataSource.setMaxLifetime(testConfig.getMaxLifetime());
-        xaDataSource.setBorrowConnectionTimeout(testConfig.getBorrowConnectionTimeout());
-        xaDataSource.setLoginTimeout(testConfig.getLoginTimeout());
-        xaDataSource.setMaintenanceInterval(testConfig.getMaintenanceInterval());
-        xaDataSource.setMaxIdleTime(testConfig.getMaxIdleTime());
-        xaDataSource.setTestQuery(testConfig.getTestQuery());
-        return xaDataSource;
-    }
-
-    @Bean(name = "testDataSource2")
-    public DataSource testDataSource2(MyDBConfig2 testConfig) throws SQLException {
-        MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
-        mysqlXaDataSource.setUrl(testConfig.getUrl());
-        mysqlXaDataSource.setPassword(testConfig.getPassword());
-        mysqlXaDataSource.setUser(testConfig.getUsername());
-
-        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-        xaDataSource.setXaDataSource(mysqlXaDataSource);
-        xaDataSource.setUniqueResourceName("dataSource2");
-
-        xaDataSource.setMinPoolSize(testConfig.getMinPoolSize());
-        xaDataSource.setMaxPoolSize(testConfig.getMaxPoolSize());
-        xaDataSource.setMaxLifetime(testConfig.getMaxLifetime());
-        xaDataSource.setBorrowConnectionTimeout(testConfig.getBorrowConnectionTimeout());
-        xaDataSource.setLoginTimeout(testConfig.getLoginTimeout());
-        xaDataSource.setMaintenanceInterval(testConfig.getMaintenanceInterval());
-        xaDataSource.setMaxIdleTime(testConfig.getMaxIdleTime());
-        xaDataSource.setTestQuery(testConfig.getTestQuery());
-        return xaDataSource;
-    }
 }
